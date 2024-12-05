@@ -13,7 +13,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import { FaBlog } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
 import { UserContext } from "../context/UserContext";
 
@@ -36,7 +35,7 @@ export const Header = () => {
         }}
       >
         <NavbarBrand href="/">
-        <link href="/blog-seo-optimization-search-svgrepo-com.svg   " />
+          <link rel="icon" type="image/svg+xml" href="blog-seo-optimization-search-svgrepo-com.svg" />
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -45,12 +44,12 @@ export const Header = () => {
               <NavLink
                 className="nav-link"
                 to="/"
-                style={{
-                  color: "white",
-                  fontSize: "18px",
-                  fontWeight: "500",
-                  textDecoration: "none",
-                }}
+                style={({ isActive }) => ({
+                  ...navLinkStyle,
+                  ...(isActive ? navLinkActiveStyle : {}),
+                })}
+                onMouseEnter={(e) => e.target.style.color = "#ff8a00"}  // Hover effect
+                onMouseLeave={(e) => e.target.style.color = ""}  // Reset hover effect
               >
                 Főoldal
               </NavLink>
@@ -59,12 +58,12 @@ export const Header = () => {
               <NavLink
                 className="nav-link"
                 to="/posts"
-                style={{
-                  color: "white",
-                  fontSize: "18px",
-                  fontWeight: "500",
-                  textDecoration: "none",
-                }}
+                style={({ isActive }) => ({
+                  ...navLinkStyle,
+                  ...(isActive ? navLinkActiveStyle : {}),
+                })}
+                onMouseEnter={(e) => e.target.style.color = "#ff8a00"}  // Hover effect
+                onMouseLeave={(e) => e.target.style.color = ""}  // Reset hover effect
               >
                 Posztok
               </NavLink>
@@ -111,7 +110,10 @@ export const Header = () => {
                     <RxAvatar style={{ fontSize: "24px", color: "white" }} />
                   </DropdownToggle>
                   <DropdownMenu end>
-                    <DropdownItem>Személyes adatok</DropdownItem>
+                    <DropdownItem>
+                      <NavLink className='nav-link' to='/profile'>Személyes adatok</NavLink>
+                      
+                      </DropdownItem>
                     <DropdownItem divider />
                     <DropdownItem>Fiók törlése</DropdownItem>
                   </DropdownMenu>
@@ -126,9 +128,9 @@ export const Header = () => {
   );
 };
 
-// Button Styles
+
 const buttonStyle = {
-  background: "linear-gradient(90deg, #ff8a00, #e52e71)", // Gradient button background
+  background: "linear-gradient(90deg, #ff8a00, #e52e71)", 
   padding: "10px 20px",
   color: "white",
   borderRadius: "8px",
@@ -140,14 +142,32 @@ const buttonStyle = {
 };
 
 const iconButtonStyle = {
-  background: "#283593", // Match the navbar background for a consistent look
+  background: "#283593", 
   border: "none",
   padding: "5px 15px",
   borderRadius: "50%",
   transition: "background 0.3s ease",
 };
 
-iconButtonStyle["&:hover"] = {
-  background: "#3f51b5", // Lighten the background on hover
+
+const navLinkStyle = {
+  color: "#f5f5f5",  
+  fontSize: "18px",
+  fontWeight: "400",  
+  textDecoration: "none",
+  padding: "8px 15px", 
+  margin: "5px",  
+  letterSpacing: "0.5px",  
+  transition: "color 0.3s ease, border-bottom 0.3s ease" 
 };
 
+const navLinkHoverStyle = {
+  color: "#ff8a00",  
+  borderBottom: "2px solid #ff8a00", 
+};
+
+const navLinkActiveStyle = {
+  color: "#ff8a00",
+  fontWeight: "600",  
+  borderBottom: "2px solid #ff8a00"
+};

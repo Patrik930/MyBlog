@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { Toastify } from "../components/Toastify";
@@ -19,6 +19,7 @@ const midleStyle = {
 
 export const Auth = () => {
   const { user, signInUser, signUpUser, msg } = useContext(UserContext);
+  const navigate = useNavigate()
 
   const location = useLocation();
   const isSignIn = location.pathname === "/auth/in";
@@ -112,6 +113,7 @@ export const Auth = () => {
             </span>
           </button>
         </Form>
+        <a  onClick={()=>navigate('/pwreset')}>Elfelejtett jelszó</a>
 
         {msg && <Toastify {...msg} />}
       </div>
@@ -119,7 +121,7 @@ export const Auth = () => {
   );
 };
 
-// Custom Styles for Inputs
+
 const inputStyle = {
   padding: "10px 15px",
   fontSize: "16px",

@@ -3,12 +3,14 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../context/UserContext';
+import { useContext } from 'react';
 
-export const Toastify = ({err,signin}) => {
+export const Toastify = ({err,signin,signup,resetPw}) => {
 
     console.log(err);
     
-
+    const {setMsg} = useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -17,9 +19,12 @@ export const Toastify = ({err,signin}) => {
         }else if(signin){
             toast.success(signin,{position: "top-center"})
             setTimeout(()=>navigate('/'),2000)
-            
+        }else if(resetPw){
+          toast.success(resetPw,{position: "top-center"})
+          setTimeout(()=>navigate('/auth/in'),2000)
         }
-    },[err,signin])
+        setMsg({})
+    },[err,signin,signup,resetPw])
 
 
   return (
