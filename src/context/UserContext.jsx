@@ -62,11 +62,13 @@ const resetPassword=async(email)=>{
 
 }
 
-const updateCredentials=async(displayName)=>{
+const updateCredentials=async(displayName,photoURL)=>{
     try {
-        await updateProfile(auth.currentUser,{displayName})
+        if(displayName && photoURL) await updateProfile(auth.currentUser,{displayName,photoURL})
+        else if(displayName) await updateProfile(auth.currentUser,{displayName})
+        else if (photoURL) await updateProfile(auth.currentUser,{photoURL})
         setMsg({})
-        setMsg({signup:"Sikeres módosítás"})
+        setMsg({update:"Sikeres módosítás"})
        } catch (error) {
            setMsg({err:err.message})        
        }

@@ -4,18 +4,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/UserContext';
 import { uploadFile } from '../utility/uploadFile';
-
-
-
-
-
+import { BarLoader } from 'react-spinners';
+import { Toastify } from '../components/Toastify';
+import { useEffect } from 'react';
+import { extractUrlAndId } from '../utility/utils';
 
 
 
 
 export const Profile = () => {
-  const {user,updateCredentials} = useContext(UserContext)
-  const [photo,setPhoto] = useState(null)
+  const {user,updateCredentials,msg} = useContext(UserContext)
+  const [ loading,setLoading] = useState(false)
+  const [avatar,setAvatar] = useState(null)
+
+
+  useEffect(()=>{
+      user?.photoURL && setAvatar(extractUrlAndId(user.photoURL).url)
+  },[user])
+
+
+
+
+
+
+
+
   const {  register, handleSubmit, formState: { errors },  } = useForm({
     defaultValues:{
       displayName:user?.displayName || ''
@@ -23,17 +36,19 @@ export const Profile = () => {
   });
 
   const onSubmit=async(data)=>{
+        setLoading(true)
         console.log(data);
         try {
           const file=data?.file ? data.file[0] : null
-          const photoUrl = await uploadFile(file)
-          photoUrl && console.log(photoUrl);
-          
-          //updateCredentials(data.displayName)
+          const {url,id} = file ? await uploadFile(file) : null
+         // const photoUrl = await uploadFile(file)
+         // photoUrl && console.log(photoUrl);
+          updateCredentials(data.displayName,url+'/'+id)
         } catch (error) {
           console.log(error);
-          
-        }
+          }finally{
+            setLoading(false)
+          }
         
   }
 
@@ -58,12 +73,16 @@ export const Profile = () => {
           return true
         }
         })}
-        onChange={(e)=>setPhoto(URL.createObjectURL(e.target.files[0]))}
+        onChange={(e)=>setAvatar(URL.createObjectURL(e.target.files[0]))}
         />
         
+        <p className="text-danger">{errors?.file?.message}</p>
+
       <input type="submit" />
     </form>
-    {photo && <img src={photo} className='img-thumbnail'/>}
+    {loading && <BarLoader/>}
+    {msg && <Toastify {...msg}/>}
+    {avatar && <img src={avatar} />}
       </div>
       
     </div>

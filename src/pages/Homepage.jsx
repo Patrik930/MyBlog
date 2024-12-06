@@ -1,9 +1,36 @@
 import React from "react";
+import { useContext } from "react";
+import { CategContext } from "../context/CategContext";
 
 export const Homepage = () => {
+
+  const {categories} = useContext(CategContext)
+  console.log(categories);
+  
+
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      
+    <div> 
+    {/*<div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">*/}
+        
+    {categories && categories.map(obj=>
+      <div className="relative grid h-[35rem] max-w-lg flex-col items-end justify-center overflow-hidden rounded-lg bg-white">
+      <div className="absolute inset-0 m-0 h-full w-full overflow-hidden rounded-none bg-transparent bg-[url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
+        <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50"></div>
+      </div>
+      <div className="relative text-center p-6 px-6 py-14 md:px-12">
+        <h2 className="mb-6 text-3xl font-medium text-white">
+          Filmek
+        </h2>
+        <img
+          alt="Filmek"
+          src="https://media.istockphoto.com/id/1642381175/hu/vektor/mozi.jpg?s=612x612&w=0&k=20&c=EH7vclFStxlKCk8aCZdP-s-sh0h6c3frVSQXYwDeXDQ="
+          className="relative inline-block h-32 w-32 rounded-full border border-white"
+        />
+      </div>
+    </div>
+    )}
+    {/*}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         
         <div className="relative grid h-[35rem] max-w-lg flex-col items-end justify-center overflow-hidden rounded-lg bg-white">
@@ -69,7 +96,9 @@ export const Homepage = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
+    
   );
 };
+

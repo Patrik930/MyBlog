@@ -15,11 +15,19 @@ import {
 } from "reactstrap";
 import { RxAvatar } from "react-icons/rx";
 import { UserContext } from "../context/UserContext";
+import { extractUrlAndId } from "../utility/utils";
+import { useEffect } from "react";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useContext(UserContext);
+  const [avatar,setAvatar] = useState(null)
 
+  useEffect(()=>{
+    user?.photoURL && setAvatar(extractUrlAndId(user.photoURL).url)
+},[user])
+  console.log(user);
+  
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -35,7 +43,7 @@ export const Header = () => {
         }}
       >
         <NavbarBrand href="/">
-          <link rel="icon" type="image/svg+xml" href="blog-seo-optimization-search-svgrepo-com.svg" />
+          {/*<link rel="icon" type="image/svg+xml" href="blog-seo-optimization-search-svgrepo-com.svg" />*/}
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -107,7 +115,7 @@ export const Header = () => {
 
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret style={iconButtonStyle}>
-                    <RxAvatar style={{ fontSize: "24px", color: "white" }} />
+                    {avatar ? <img className="myavatar" src={avatar}/> : <RxAvatar title={user.displayName}/> }
                   </DropdownToggle>
                   <DropdownMenu end>
                     <DropdownItem>
