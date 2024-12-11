@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -16,18 +16,16 @@ import {
 import { RxAvatar } from "react-icons/rx";
 import { UserContext } from "../context/UserContext";
 import { extractUrlAndId } from "../utility/utils";
-import { useEffect } from "react";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useContext(UserContext);
-  const [avatar,setAvatar] = useState(null)
+  const [avatar, setAvatar] = useState(null);
 
-  useEffect(()=>{
-    user?.photoURL && setAvatar(extractUrlAndId(user.photoURL).url)
-},[user])
-  console.log(user);
-  
+  useEffect(() => {
+    user?.photoURL && setAvatar(extractUrlAndId(user.photoURL).url);
+  }, [user]);
+
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -37,17 +35,15 @@ export const Header = () => {
         dark
         expand="md"
         style={{
-          backgroundColor: "#283593", 
+          backgroundColor: "#000000", // Black header background
           padding: "15px",
           boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <NavbarBrand href="/">
-          {/*<link rel="icon" type="image/svg+xml" href="blog-seo-optimization-search-svgrepo-com.svg" />*/}
-        </NavbarBrand>
+        <NavbarBrand href="/"> {/* Add Logo if needed */} </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="me-auto" navbar>
+          <Nav className="me-auto" navbar style={{ display: "flex" }}>
             <NavItem>
               <NavLink
                 className="nav-link"
@@ -56,7 +52,7 @@ export const Header = () => {
                   ...navLinkStyle,
                   ...(isActive ? navLinkActiveStyle : {}),
                 })}
-                onMouseEnter={(e) => e.target.style.color = "#ff8a00"}  // Hover effect
+                onMouseEnter={(e) => e.target.style.color = "#ff8a00"} // Hover effect
                 onMouseLeave={(e) => e.target.style.color = ""}  // Reset hover effect
               >
                 Főoldal
@@ -70,32 +66,40 @@ export const Header = () => {
                   ...navLinkStyle,
                   ...(isActive ? navLinkActiveStyle : {}),
                 })}
-                onMouseEnter={(e) => e.target.style.color = "#ff8a00"}  // Hover effect
+                onMouseEnter={(e) => e.target.style.color = "#ff8a00"} // Hover effect
                 onMouseLeave={(e) => e.target.style.color = ""}  // Reset hover effect
               >
                 Posztok
               </NavLink>
             </NavItem>
+            {user && (
+              <NavItem>
+                <NavLink
+                  className="nav-link"
+                  to="/create"
+                  style={({ isActive }) => ({
+                    ...navLinkStyle,
+                    ...(isActive ? navLinkActiveStyle : {}),
+                  })}
+                  onMouseEnter={(e) => e.target.style.color = "#ff8a00"} // Hover effect
+                  onMouseLeave={(e) => e.target.style.color = ""}  // Reset hover effect
+                >
+                  Új bejegyzés
+                </NavLink>
+              </NavItem>
+            )}
           </Nav>
 
           <Nav navbar>
             {!user ? (
               <>
                 <NavItem>
-                  <NavLink
-                    className="nav-link"
-                    to="/auth/in"
-                    style={buttonStyle}
-                  >
+                  <NavLink className="nav-link" to="/auth/in" style={buttonStyle}>
                     Belépés
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    className="nav-link"
-                    to="/auth/up"
-                    style={buttonStyle}
-                  >
+                  <NavLink className="nav-link" to="/auth/up" style={buttonStyle}>
                     Regisztráció
                   </NavLink>
                 </NavItem>
@@ -115,13 +119,18 @@ export const Header = () => {
 
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret style={iconButtonStyle}>
-                    {avatar ? <img className="myavatar" src={avatar}/> : <RxAvatar title={user.displayName}/> }
+                    {avatar ? (
+                      <img className="myavatar" src={avatar} alt="User Avatar" />
+                    ) : (
+                      <RxAvatar title={user.displayName} />
+                    )}
                   </DropdownToggle>
                   <DropdownMenu end>
                     <DropdownItem>
-                      <NavLink className='nav-link' to='/profile'>Személyes adatok</NavLink>
-                      
-                      </DropdownItem>
+                      <NavLink className="nav-link" to="/profile">
+                        Személyes adatok
+                      </NavLink>
+                    </DropdownItem>
                     <DropdownItem divider />
                     <DropdownItem>Fiók törlése</DropdownItem>
                   </DropdownMenu>
@@ -136,9 +145,9 @@ export const Header = () => {
   );
 };
 
-
+// Button Style
 const buttonStyle = {
-  background: "linear-gradient(90deg, #ff8a00, #e52e71)", 
+  background: "linear-gradient(90deg, #ff8a00, #e52e71)",
   padding: "10px 20px",
   color: "white",
   borderRadius: "8px",
@@ -149,33 +158,30 @@ const buttonStyle = {
   transition: "all 0.3s ease-in-out",
 };
 
+// Avatar Icon Style
 const iconButtonStyle = {
-  background: "#283593", 
+  background: "#000000", // Black background for the icon button
   border: "none",
   padding: "5px 15px",
   borderRadius: "50%",
   transition: "background 0.3s ease",
 };
 
-
+// NavLink Style
 const navLinkStyle = {
-  color: "#f5f5f5",  
+  color: "#ffffff",  // White color for nav items
   fontSize: "18px",
-  fontWeight: "400",  
+  fontWeight: "400",
   textDecoration: "none",
-  padding: "8px 15px", 
-  margin: "5px",  
-  letterSpacing: "0.5px",  
-  transition: "color 0.3s ease, border-bottom 0.3s ease" 
+  padding: "8px 15px",
+  margin: "5px",
+  letterSpacing: "0.5px",
+  transition: "color 0.3s ease, border-bottom 0.3s ease",
 };
 
-const navLinkHoverStyle = {
-  color: "#ff8a00",  
-  borderBottom: "2px solid #ff8a00", 
-};
-
+// Active NavLink Style
 const navLinkActiveStyle = {
-  color: "#ff8a00",
-  fontWeight: "600",  
-  borderBottom: "2px solid #ff8a00"
+  color: "#ff8a00",  // Active color
+  fontWeight: "600",
+  borderBottom: "2px solid #ff8a00", // Bottom border for active nav item
 };

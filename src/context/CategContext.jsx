@@ -13,7 +13,7 @@ export const CategProvider=({children})=>{
             readCategories(setCategories)
         },[])
         return (
-            <CategContext.Provider value={categories}>
+            <CategContext.Provider value={{categories}}>
                 {children}
             </CategContext.Provider>
         )
