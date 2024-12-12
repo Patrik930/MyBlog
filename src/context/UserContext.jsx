@@ -1,6 +1,6 @@
 import React from 'react'
 import { auth } from '../utility/firebaseApp'
-import { createUserWithEmailAndPassword, onAuthStateChanged,sendPasswordResetEmail,signInWithEmailAndPassword,signOut, updateProfile, } from 'firebase/auth'
+import { createUserWithEmailAndPassword, deleteUser, onAuthStateChanged,sendPasswordResetEmail,signInWithEmailAndPassword,signOut, updateProfile, } from 'firebase/auth'
 import { createContext } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -74,6 +74,16 @@ const updateCredentials=async(displayName,photoURL)=>{
        }
 }
 
+const deleteAccount = async() =>{
+    try {
+        await deleteUser(auth.currentUser)
+        console.log('Sikeres törlés!');
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
 
 
 
@@ -81,7 +91,7 @@ const updateCredentials=async(displayName,photoURL)=>{
     
 
     return(
-        <UserContext.Provider value={{user,signInUser,logOut,signUpUser,msg,setMsg,resetPassword,updateCredentials}}>
+        <UserContext.Provider value={{user,signInUser,logOut,signUpUser,msg,setMsg,resetPassword,updateCredentials,deleteAccount}}>
             {children}
         </UserContext.Provider>
     )

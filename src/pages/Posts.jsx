@@ -15,8 +15,8 @@ console.log(posts);
   return (
     <div>
       {posts?.length > 0 &&
-        posts.map((key) => (
-          <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+        posts.map(key => 
+          <div key={key.id} className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
             <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">
               <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
                 <img
@@ -44,7 +44,7 @@ console.log(posts);
               </div>
             </div>
           </div>
-        ))}
+        )}
       ;
     </div>
   );

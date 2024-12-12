@@ -8,16 +8,22 @@ import { Story } from '../components/Story'
 import { uploadFile } from '../utility/uploadFile'
 import { BarLoader } from 'react-spinners'
 import { addPost } from '../utility/crudUtility'
+import { CategContext } from '../context/CategContext'
+import { CategDropDown } from '../components/CategDropDown'
+import Alerts from '../components/Alerts'
 
 export const AddEditPost = () => {
 
   const {user} =  useContext(UserContext)
+  const {categories} = useContext(CategContext)
   const [loading,setLoading] = useState(false)
   const [photo,setPhoto] = useState(null)
   const [story,setStory] = useState(null)
   const [uploaded,setUploaded] = useState(null)
+  const [selCateg,setSelCateg] = useState(null)
+
   
-  const {  register, handleSubmit, formState: { errors },  } = useForm();
+  const {  register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const onSubmit=async(data)=>{
     setLoading(true)
@@ -26,7 +32,7 @@ export const AddEditPost = () => {
       story,
       author: user.displayName,
       userId:user.uid,
-      category: 'Filmek'
+      category: selCateg
     }
     console.log(newPostData);
     
@@ -39,7 +45,9 @@ export const AddEditPost = () => {
       console.log(newPostData);
       addPost(newPostData)
       setUploaded(true)
-      
+      reset()
+      setPhoto(null)
+      setStory(null)
      
       //updateCredentials(data.displayName,url+'/'+id)
     } catch (error) {
@@ -62,6 +70,7 @@ export const AddEditPost = () => {
         <input {...register('title', {required:true})}  type='text' />
         <p className='text-danger'>{errors?.title && 'A cím megadása kötelező'}</p>
       </div>
+      <CategDropDown categories={categories} setSelCateg={setSelCateg} selCateg={selCateg}/>
       <Story setStory={setStory} uploaded={uploaded}/>
     <input type="file" {...register('file',{
       validate:(value)=>{
@@ -79,11 +88,12 @@ export const AddEditPost = () => {
       />
       
       <p className="text-danger">{errors?.file?.message}</p>
+      <p className='text-danger'>{errors?.file && 'Fotó feltöltése kötelező'}</p>
 
-    <input type="submit" />
+    <input disabled={!selCateg} type="submit" />
   </form>
   {loading && <BarLoader/>}
-
+  {uploaded && <Alerts txt='Sikeres feltöltés'/>}
   {photo && <img src={photo} />}
     </div>
     

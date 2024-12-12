@@ -3,7 +3,6 @@ import { CategContext } from "../context/CategContext";
 
 export const Homepage = () => {
   const { categories } = useContext(CategContext);
-  console.log(categories);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-gray-100">

@@ -8,14 +8,23 @@ import { BarLoader } from 'react-spinners';
 import { Toastify } from '../components/Toastify';
 import { useEffect } from 'react';
 import { extractUrlAndId } from '../utility/utils';
+import { confirm } from 'material-ui-confirm';
+import { useConfirm } from 'material-ui-confirm';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 export const Profile = () => {
-  const {user,updateCredentials,msg} = useContext(UserContext)
+  const {user,updateCredentials,msg,deleteAccount,logOut} = useContext(UserContext)
   const [ loading,setLoading] = useState(false)
   const [avatar,setAvatar] = useState(null)
+  const confirm = useConfirm()
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    !user && navigate('/')
+  },[user])
 
 
   useEffect(()=>{
@@ -52,6 +61,23 @@ export const Profile = () => {
         
   }
 
+  const handleDelete = async() =>{
+    try {
+      await confirm({
+        description: 'Ez egy visszavonhatatlan művelet!',
+        confirmationText: 'Igen',
+        cancellationText: 'Mégsem',
+        title: 'Biztosan ki szeretnéd törölni a felhasználói fiókodat?'
+
+    })
+    await deleteAccount()
+    logOut()
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
 
   return (
     <div className='mt-10'>
@@ -85,6 +111,7 @@ export const Profile = () => {
     {avatar && <img src={avatar} />}
       </div>
       
+      <button class='btn btn-danger' onClick={handleDelete}>Felhasználói fiök törlése</button>
     </div>
   )
 }
