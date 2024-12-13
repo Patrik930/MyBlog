@@ -1,19 +1,39 @@
 import React, { useEffect } from "react";
 import { readPosts } from "../utility/crudUtility";
 import { useState } from "react";
+import { useContext } from "react";
+import { CategContext } from "../context/CategContext";
+import { Categories } from "../components/Categories";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const Posts = () => {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [posts, setPosts] = useState([]);
-console.log(posts);
+  const [selCateg,setSelCateg] = useState(searchParams.get('ctg') ? [searchParams.get('ctg') ]: [])
+  console.log('url paraméter' + searchParams.get('ctg') ? searchParams.get('ctg') : []);
+  
+  
 
   useEffect(() => {
-    readPosts(setPosts);
-  }, []);
+    readPosts(setPosts,selCateg);
+  }, [selCateg]);
 
-  posts.length > 0 && console.log(posts);
+  
+
+
+  console.log(selCateg);
+  
+  
 
   return (
+
     <div>
+      
+          <Categories selCateg={selCateg} setSelCateg={setSelCateg}/>
+  
+      
+      
       {posts?.length > 0 &&
         posts.map(key => 
           <div key={key.id} className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
@@ -36,6 +56,7 @@ console.log(posts);
               </div>
               <div className="px-4 pb-4 pt-0 mt-2">
                 <button
+                onClick={()=>navigate('/detail/'+key.id)}
                   className="rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   type="button"
                 >

@@ -12,6 +12,7 @@ import { Admin } from './pages/Admin'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Header } from './components/Header'
 import { NotFound } from './pages/NotFound'
+import { DetailPost } from './pages/DetailPost'
 
 const router=createBrowserRouter([{
   element: <Header/>,
@@ -21,6 +22,7 @@ const router=createBrowserRouter([{
     {path:'/posts',element:<Posts/>},
     {path:'/create',element:<AddEditPost/>},
     {path:'/update/:id',element:<AddEditPost/>},
+    {path:'/detail/:id',element:<DetailPost/>},
     {path:'/auth/in',element:<Auth/>},
     {path:'/auth/up',element:<Auth/>},
     {path:'/pwreset',element:<PWreset/>},

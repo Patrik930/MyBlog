@@ -1,5 +1,8 @@
 import React, { useContext } from "react";
 import { CategContext } from "../context/CategContext";
+import { NavLink } from "react-router-dom";
+
+
 
 export const Homepage = () => {
   const { categories } = useContext(CategContext);
@@ -16,16 +19,17 @@ export const Homepage = () => {
               className="w-full h-48 object-cover rounded-t-lg"
             />
             <div className="p-4">
+              
               <h2 className="font-bold text-xl text-orange-700 mb-2">{obj.name}</h2>
               <p className="text-black mb-4">
                 Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
               </p>
-              <button
-                href="#"
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-orange-800"
+              <NavLink
+              to={'/posts?ctg='+obj.name}
               >
-                Read more
-              </button>
+              <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-orange-800">Read more</button>
+              </NavLink>
+           
             </div>
           </div>
         ))}

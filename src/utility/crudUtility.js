@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore"
+import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore"
 import { db } from "./firebaseApp"
 
 export const readCategories=(setCategories)=>{
@@ -16,11 +16,20 @@ export const addPost = async(formData)=>{
     await addDoc(collectionRef,newItem)
 }
 
-export const readPosts=(setPosts)=>{
+export const readPosts=(setPosts,selCateg)=>{
     const collectionRef = collection(db,'posts')
-    const q = query(collectionRef,orderBy('timestamp','asc'))
+    const q=selCateg.length == 0 ?
+     query(collectionRef,orderBy('timestamp','asc'))
+     :
+     query(collectionRef,where('category','in',selCateg))
    const unsubscribe = onSnapshot(q,(snapshot)=>{
         setPosts(snapshot.docs.map(doc=>({...doc.data(),id:doc.id})))
     })
     return unsubscribe;
+}
+
+export const ReadPost=async(id,setPost)=>{
+    const docRef = doc(db,'posts',id)
+    const docSnap = await getDoc(docRef)
+    setPost({...docSnap.data(),id:docSnap.id})
 }
