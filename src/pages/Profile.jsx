@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/UserContext';
-import { uploadFile } from '../utility/uploadFile';
+import { delPhoto, uploadFile } from '../utility/uploadFile';
 import { BarLoader } from 'react-spinners';
 import { Toastify } from '../components/Toastify';
 import { useEffect } from 'react';
@@ -72,6 +72,7 @@ export const Profile = () => {
     })
     await deleteAccount()
     logOut()
+    delPhoto(user.photoURL.split("/").pop())
     } catch (error) {
       console.log(error);
       
