@@ -18,9 +18,9 @@ export const Categories = ({categ,selCateg,setSelCateg}) => {
   return (
     <div>
           {categories && categories.map((obj) => (   
-    <div className="mt-40">
+    <div key={obj.id} className="mt-40">
       <FormGroup 
-      key={obj.id}>
+      >
         <FormControlLabel control={<Checkbox onChange={handleChange} value={obj.name} checked={selCateg.includes(obj.name)}  />} label={obj.name} />
       </FormGroup>
     </div>

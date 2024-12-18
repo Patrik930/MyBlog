@@ -10,7 +10,7 @@ import { BarLoader } from 'react-spinners'
 import { addPost } from '../utility/crudUtility'
 import { CategContext } from '../context/CategContext'
 import { CategDropDown } from '../components/CategDropDown'
-import Alerts from '../components/Alerts'
+import { Alerts } from '../components/Alerts'
 
 export const AddEditPost = () => {
 
@@ -93,7 +93,7 @@ export const AddEditPost = () => {
     <input disabled={!selCateg} type="submit" />
   </form>
   {loading && <BarLoader/>}
-  {uploaded && <Alerts txt='Sikeres feltöltés'/>}
+  {uploaded && <Alerts txt='Sikeres feltöltés' err={null}/>}
   {photo && <img src={photo} />}
     </div>
     

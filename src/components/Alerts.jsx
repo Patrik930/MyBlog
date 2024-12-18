@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 
 export const Alerts = ({txt,err}) => {
 
@@ -16,4 +16,4 @@ export const Alerts = ({txt,err}) => {
   )
 }
 
-export default Alerts
+
