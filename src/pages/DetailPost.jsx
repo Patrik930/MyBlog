@@ -1,16 +1,26 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useNavigate, useParams,  } from 'react-router-dom'
-import { deletePost, ReadPost } from '../utility/crudUtility';
+import { deletePost, readLikes, ReadPost, toggleLike } from '../utility/crudUtility';
 import { useState } from 'react';
 import parse from 'html-react-parser';
 import { FaTrashCan } from "react-icons/fa6"
 import { useConfirm } from 'material-ui-confirm';
 import { delPhoto } from '../utility/uploadFile';
+import { Button } from 'reactstrap';
+import { UserContext } from '../context/UserContext';
+import { useContext } from 'react';
+import { Alerts } from '../components/Alerts';
 
 export const DetailPost = () => {
 
+    const {user} = useContext(UserContext)
+
     const  [post,setPost] = useState(null)
+
+    const [txt,setText] = useState(null)
+
+    
 
     const params = useParams()
 
@@ -43,7 +53,14 @@ export const DetailPost = () => {
       }
     }
   
-    
+    const handleLikes=async()=>{
+        if(!user) setText("Csak bejelentkezett felhasználók likeolhatnak")
+        else{
+            await toggleLike(user.uid,post.id)
+            
+      
+        } 
+    }
 
   return (
     <div>
@@ -52,7 +69,19 @@ export const DetailPost = () => {
         <p>{parse(post.story)}</p>
       </>}
       <button className='btn btn-primary' onClick={()=>navigate('/posts')}> vissza </button>
+      <div>
+        <button onClick={handleLikes}>👍</button>
+     {post && <span>Likes number: {post.likes.length}</span>}
+      </div>
+     
+      {user && post && (user.uid==post.userId) &&
+      <>
       <button onClick={handleDelete} className='btn btn-danger'>< FaTrashCan /></button>
+      <button onClick={()=>navigate('/update/'+post.id)}>✏️</button>
+      <button></button>
+      </>
+}
+      {txt && <Alerts txt={txt} err={false}/>}
     </div>
   )
 }

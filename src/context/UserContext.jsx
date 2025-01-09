@@ -47,7 +47,7 @@ const signUpUser=async(email,password,displayName)=>{
      setMsg({})
      setMsg({signup:"Sikeres regisztráció!"})
     } catch (error) {
-        setMsg({err:err.message})        
+        setMsg({err:error.message})        
     }
 }
 

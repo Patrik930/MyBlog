@@ -7,10 +7,12 @@ import { useForm } from 'react-hook-form'
 import { Story } from '../components/Story'
 import { uploadFile } from '../utility/uploadFile'
 import { BarLoader } from 'react-spinners'
-import { addPost } from '../utility/crudUtility'
+import { addPost, ReadPost } from '../utility/crudUtility'
 import { CategContext } from '../context/CategContext'
 import { CategDropDown } from '../components/CategDropDown'
 import { Alerts } from '../components/Alerts'
+import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export const AddEditPost = () => {
 
@@ -21,7 +23,18 @@ export const AddEditPost = () => {
   const [story,setStory] = useState(null)
   const [uploaded,setUploaded] = useState(null)
   const [selCateg,setSelCateg] = useState(null)
+  const params = useParams()
+  //az deitáláshoz kell
+  const [post,setPost] = useState(null)
+  console.log(params.id);
+  
+  useEffect(()=>{
+    if(params?.id) ReadPost(params.id,setPost)
+  }
+  ,[params?.id])
 
+  console.log(post);
+  
   
   const {  register, handleSubmit, formState: { errors }, reset } = useForm();
 
@@ -32,7 +45,8 @@ export const AddEditPost = () => {
       story,
       author: user.displayName,
       userId:user.uid,
-      category: selCateg
+      category: selCateg,
+      likes:[]
     }
     console.log(newPostData);
     
