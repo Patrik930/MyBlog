@@ -65,3 +65,8 @@ export const readLikes = async(id,setLikesNr)=>{
     const docSnap = await getDoc(docRef)
     setLikesNr(docSnap.data().likes.length)
 }
+
+export const updatePost = async(id,{title,category,story})=>{
+    const docRef = doc(db,'posts',id)
+    await updateDoc(docRef,{title,category,story})
+}

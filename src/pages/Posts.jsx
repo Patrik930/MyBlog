@@ -5,6 +5,10 @@ import { useContext } from "react";
 import { CategContext } from "../context/CategContext";
 import { Categories } from "../components/Categories";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { SearchBox } from "../components/SearchBar";
+
+
+
 
 export const Posts = () => {
   const navigate = useNavigate()
@@ -31,6 +35,10 @@ export const Posts = () => {
     <div>
       
           <Categories selCateg={selCateg} setSelCateg={setSelCateg}/>
+          <div style={{color: "black"}}>
+          {posts && <SearchBox items={posts.map(obj=>({id:obj.id,name:obj.title}))}/>}
+          </div>
+          
   
       
       

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { Story } from '../components/Story'
 import { uploadFile } from '../utility/uploadFile'
 import { BarLoader } from 'react-spinners'
-import { addPost, ReadPost } from '../utility/crudUtility'
+import { addPost, ReadPost, updatePost } from '../utility/crudUtility'
 import { CategContext } from '../context/CategContext'
 import { CategDropDown } from '../components/CategDropDown'
 import { Alerts } from '../components/Alerts'
@@ -34,43 +34,66 @@ export const AddEditPost = () => {
   ,[params?.id])
 
   console.log(post);
+
+  useEffect(()=>{
+    if(post){
+      setValue("title",post.title)
+      setSelCateg(post.category)
+      setStory(post.story)
+    }
+  },[post])
   
   
-  const {  register, handleSubmit, formState: { errors }, reset } = useForm();
+  const {  register, handleSubmit, formState: { errors }, reset ,setValue} = useForm();
 
   const onSubmit=async(data)=>{
-    setLoading(true)
-    let newPostData={
-      ...data,
-      story,
-      author: user.displayName,
-      userId:user.uid,
-      category: selCateg,
-      likes:[]
-    }
-    console.log(newPostData);
-    
-    try {
-      const file=data?.file ? data.file[0] : null
-      const {url,id} = file ? await uploadFile(file) : null
-      delete newPostData.file
 
-      newPostData={...newPostData,photo:{url,id}}
-      console.log(newPostData);
-      addPost(newPostData)
-      setUploaded(true)
-      reset()
-      setPhoto(null)
-      setStory(null)
-     
-      //updateCredentials(data.displayName,url+'/'+id)
-    } catch (error) {
-      console.log(error);
+    if(params.id){
+      try {
+        updatePost(params.id,{...data,category:selCateg,story})
+      } catch (error) {
+        console.log('Update',error);
       }finally{
         setLoading(false)
       }
-    
-}
+    }else{
+      setLoading(true)
+      let newPostData={
+        ...data,
+        story,
+        author: user.displayName,
+        userId:user.uid,
+        category: selCateg,
+        likes:[]
+      }
+      console.log(newPostData);
+      
+      try {
+        const file=data?.file ? data.file[0] : null
+        const {url,id} = file ? await uploadFile(file) : null
+        delete newPostData.file
+  
+        newPostData={...newPostData,photo:{url,id}}
+        console.log(newPostData);
+        addPost(newPostData)
+        setUploaded(true)
+        reset()
+        setPhoto(null)
+        setStory(null)
+       
+        //updateCredentials(data.displayName,url+'/'+id)
+      } catch (error) {
+        console.log(error);
+        }finally{
+          setLoading(false)
+        }
+      
+  }
+    }
+
+
+
+   
 
 
   if(!user) return <Homepage/>
@@ -81,12 +104,12 @@ export const AddEditPost = () => {
     <div>
     <form onSubmit={handleSubmit(onSubmit)}>
       <div><label>A bejegyzés címe</label>
-        <input {...register('title', {required:true})}  type='text' />
+        <input {...register('title', {required:!params.id})}  type='text' />
         <p className='text-danger'>{errors?.title && 'A cím megadása kötelező'}</p>
       </div>
       <CategDropDown categories={categories} setSelCateg={setSelCateg} selCateg={selCateg}/>
-      <Story setStory={setStory} uploaded={uploaded}/>
-    <input type="file" {...register('file',{
+      <Story setStory={setStory} uploaded={uploaded} story={story}/>
+    <input type="file" disabled={params.id} {...register('file',{
       validate:(value)=>{
         if(!value[0]) return true
         console.log(value[0]);
@@ -108,7 +131,7 @@ export const AddEditPost = () => {
   </form>
   {loading && <BarLoader/>}
   {uploaded && <Alerts txt='Sikeres feltöltés' err={null}/>}
-  {photo && <img src={photo} />}
+  <img src={post?.photo?.url ? post.photo.url : photo} />
     </div>
     
   </div>
