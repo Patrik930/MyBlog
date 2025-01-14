@@ -1,80 +1,78 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { readPosts } from "../utility/crudUtility";
-import { useState } from "react";
-import { useContext } from "react";
 import { CategContext } from "../context/CategContext";
 import { Categories } from "../components/Categories";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { SearchBox } from "../components/SearchBar";
 
-
-
-
 export const Posts = () => {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
-  const [selCateg,setSelCateg] = useState(searchParams.get('ctg') ? [searchParams.get('ctg') ]: [])
-  console.log('url paraméter' + searchParams.get('ctg') ? searchParams.get('ctg') : []);
-  
-  
+  const [selCateg, setSelCateg] = useState(
+    searchParams.get("ctg") ? [searchParams.get("ctg")] : []
+  );
 
   useEffect(() => {
-    readPosts(setPosts,selCateg);
+    readPosts(setPosts, selCateg);
   }, [selCateg]);
 
-  
-
-
-  console.log(selCateg);
-  
-  
-
   return (
+    <div className="bg-gray-50 min-h-screen p-6">
+      <div className="container mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-4 mb-4">
+          <Categories selCateg={selCateg} setSelCateg={setSelCateg} />
+        </div>
+        <div className="mb-6 flex justify-center">
+          {posts && (
+            <SearchBox
+              items={posts.map((obj) => ({ id: obj.id, name: obj.title }))}
+            />
+          )}
+        </div>
 
-    <div>
-      
-          <Categories selCateg={selCateg} setSelCateg={setSelCateg}/>
-          <div style={{color: "black"}}>
-          {posts && <SearchBox items={posts.map(obj=>({id:obj.id,name:obj.title}))}/>}
-          </div>
-          
-  
-      
-      
-      {posts?.length > 0 &&
-        posts.map(key => 
-          <div key={key.id} className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-            <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">
-              <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
-                <img
-                  src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
-                  alt="card-image"
-                  className="w-full h-full object-cover"
-                />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {posts?.length > 0 &&
+            posts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-white shadow-md border border-gray-200 rounded-lg overflow-hidden"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={post.photo.url}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h6 className="text-lg font-semibold text-gray-800 mb-2">
+                    {post.title}
+                  </h6>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Feltöltő: {post.author}
+                  </p>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {post.story}
+                  </p>
+                </div>
+                <div className="p-4 border-t border-gray-200">
+                  <button
+                    onClick={() => navigate(`/detail/${post.id}`)}
+                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition duration-300"
+                  >
+                    Tudj meg többet
+                  </button>
+                </div>
               </div>
-              <div className="p-4">
-                <h6 className="mb-2 text-slate-800 text-xl font-semibold">
-                  Author : {key.author}<br></br>
-                  Title : {key.title}
-                </h6>
-                <p className="text-slate-600 leading-normal font-light">
-                  {key.story}<br></br><br></br>
-                </p>
-              </div>
-              <div className="px-4 pb-4 pt-0 mt-2">
-                <button
-                onClick={()=>navigate('/detail/'+key.id)}
-                  className="rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
-                >
-                  Read more
-                </button>
-              </div>
-            </div>
+            ))}
+        </div>
+
+        {posts?.length === 0 && (
+          <div className="text-center text-gray-500 mt-12">
+            Nem található poszt! Válassz másik kategóriát!
           </div>
         )}
-      ;
+      </div>
     </div>
   );
 };

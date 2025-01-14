@@ -12,7 +12,7 @@ export const Homepage = () => {
       <div className="flex flex-wrap justify-center gap-6">
         {categories && categories.map((obj) => (
           <div key={obj.id} className="w-80 bg-white rounded-lg shadow-2xl p-6 flex flex-col">
-            {/* Card image */}
+            
             <img
               src={obj.photoUrl}
               alt={obj.name}
@@ -21,13 +21,11 @@ export const Homepage = () => {
             <div className="p-4">
               
               <h2 className="font-bold text-xl text-orange-700 mb-2">{obj.name}</h2>
-              <p className="text-black mb-4">
-                Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
-              </p>
+             
               <NavLink
               to={'/posts?ctg='+obj.name}
               >
-              <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-orange-800">Read more</button>
+              <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-orange-800">Tudj meg többet</button>
               </NavLink>
            
             </div>
